@@ -59,7 +59,6 @@ module VerifactuHelpers
       .con_tipo_huella('01')
       .con_huella(huella)
       block.call(builder) if block_given?
-      
       builder.build
   end
 
