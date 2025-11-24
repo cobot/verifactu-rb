@@ -75,7 +75,6 @@ module Verifactu
         L2C = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"] # Meses del año Periodo de imputación
 
 
-        PAISES_PERMITIDOS = ['DE', 'AT', 'BE', 'CY', 'CZ', 'HR', 'DK', 'SK', 'SI', 'ES', 'EE', 'FI', 'FR', 'EL', 'GB', 'XI', 'NL', 'HU', 'IT', 'IE', 'LV', 'LT', 'LU', 'MT', 'PL', 'PT', 'SE', 'BG', 'RO']
         TIPO_IMPOSITIVO = ["0", "2", "3", "4", "5", "7", "7.5", "9.5", "10", "15", "20", "21"]
         TIPO_RECARGO_EQUIVALENCIA = ["0", "0.26", "0.5", "0.62", "1", "1.4", "1.75", "5.2"]
 
