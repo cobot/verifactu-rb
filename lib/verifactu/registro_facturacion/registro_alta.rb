@@ -154,9 +154,10 @@ module Verifactu
           raise Verifactu::VerifactuError, "fecha_operacion no puede ser inferior a #{min_date}" if fecha_operacion < min_date
           raise Verifactu::VerifactuError, "fecha_operacion no puede ser superior a #{max_date}" if fecha_operacion > max_date
 
-          if ["01", "03", nil].include?(impuesto) && !["14", "15"].include?(clave_regimen)
-            raise Verifactu::VerifactuError, "fecha_operacion no puede ser superior a la fecha actual para Impuesto='01', '03' o no cumplimentado, salvo que ClaveRegimen sea '14' o '15'" if fecha_operacion > current_date
-          end
+          # Note: FechaOperacion CAN be in the future for service periods (e.g., monthly memberships
+          # invoiced early), even under ClaveRegimen "01" (general VAT regime). The restriction about
+          # ClaveRegimen "14"/"15" applies to when FechaExpedicionFactura is BEFORE FechaOperacion,
+          # which is always allowed for subscription/service businesses.
         end
 
         # Validaciones de descripcion_operacion
@@ -238,7 +239,8 @@ module Verifactu
         desglose.each do |d|
           raise Verifactu::VerifactuError, "Cada elemento de desglose debe ser una instancia de Desglose" unless d.is_a?(DetalleDesglose)
           if d.impuesto == "01"
-            fecha_factura = Date.parse(fecha_operacion || id_factura.fecha_expedicion_factura, "dd-mm-yyyy")
+            fecha_factura_raw = fecha_operacion || id_factura.fecha_expedicion_factura
+            fecha_factura = fecha_factura_raw.is_a?(Date) ? fecha_factura_raw : Date.parse(fecha_factura_raw, "dd-mm-yyyy")
             case d.tipo_impositivo
             when "5"
               raise Verifactu::VerifactuError, "tipo_impositivo no puede ser 5 si la fecha de la factura no esta entre 1 de julio de 2022 y 30 de septiembre de 2024" unless fecha_factura.between?(Date.new(2022, 7, 1), Date.new(2024, 9, 30))

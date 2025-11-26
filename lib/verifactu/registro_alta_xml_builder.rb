@@ -126,6 +126,13 @@ module Verifactu
         end
       end
 
+      # Agrega FechaOperacion (optional - service period start date)
+      if registro.fecha_operacion
+        fecha_operacion_element = Nokogiri::XML::Node.new('sum1:FechaOperacion', xml_document_root)
+        fecha_operacion_element.content = registro.fecha_operacion.strftime('%d-%m-%Y')
+        xml_document_root.add_child(fecha_operacion_element)
+      end
+
       # Agrega DescripcionOperacion
       descripcion_operacion_element = Nokogiri::XML::Node.new('sum1:DescripcionOperacion', xml_document_root)
       descripcion_operacion_element.content = registro.descripcion_operacion
